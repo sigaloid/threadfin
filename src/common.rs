@@ -1,7 +1,8 @@
-use crate::{Builder, CommonAlreadyInitializedError, ThreadPool};
-use once_cell::sync::OnceCell;
+use std::sync::OnceLock;
 
-static COMMON: OnceCell<ThreadPool> = OnceCell::new();
+use crate::{Builder, CommonAlreadyInitializedError, ThreadPool};
+
+static COMMON: OnceLock<ThreadPool> = OnceLock::new();
 
 /// Get a shared reference to a common thread pool for the entire process.
 ///

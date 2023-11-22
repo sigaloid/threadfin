@@ -1,13 +1,12 @@
 use std::{
+    sync::LazyLock,
     task::Waker,
     thread::{self, Thread},
 };
 
-use once_cell::sync::Lazy;
-
 /// Creates a dummy waker that does nothing.
 pub(crate) fn empty_waker() -> Waker {
-    static WAKER: Lazy<Waker> = Lazy::new(|| waker_fn::waker_fn(move || {}));
+    static WAKER: LazyLock<Waker> = LazyLock::new(|| waker_fn::waker_fn(move || {}));
 
     WAKER.clone()
 }

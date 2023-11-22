@@ -1,4 +1,6 @@
-# Threadfin
+# Threadfin - Fork
+
+## FORK - MSRV is now 1.70! Gets rid of once_cell dependency.
 
 A thread pool for running multiple tasks on a configurable group of threads.
 

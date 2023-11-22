@@ -336,8 +336,7 @@ impl Coroutine {
         F: FnOnce() -> T + Send + 'static,
         T: Send + 'static,
     {
-        self
-            .poller
+        self.poller
             .into_any()
             .downcast::<ClosurePoller<F, T>>()
             .unwrap()
@@ -353,8 +352,7 @@ impl Coroutine {
         F: Future<Output = T> + Send + 'static,
         T: Send + 'static,
     {
-        self
-            .poller
+        self.poller
             .into_any()
             .downcast::<FuturePoller<F, T>>()
             .unwrap()

@@ -32,6 +32,8 @@
 //! println!("Sum: 2 + 2 = {}", sum);
 //! ```
 
+#![feature(lazy_cell)]
+
 mod common;
 mod error;
 mod pool;

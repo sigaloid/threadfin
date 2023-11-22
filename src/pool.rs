@@ -8,6 +8,7 @@ use std::{
         atomic::{AtomicUsize, Ordering},
         Arc,
         Condvar,
+        LazyLock,
         Mutex,
     },
     thread,
@@ -15,7 +16,6 @@ use std::{
 };
 
 use crossbeam_channel::{bounded, unbounded, Receiver, Sender};
-use once_cell::sync::Lazy;
 
 use crate::{
     error::PoolFullError,
@@ -110,7 +110,7 @@ impl SizeConstraint for RangeToInclusive<usize> {
 /// ```
 pub struct PerCore<T>(pub T);
 
-static CORE_COUNT: Lazy<usize> = Lazy::new(|| num_cpus::get().max(1));
+static CORE_COUNT: LazyLock<usize> = LazyLock::new(|| num_cpus::get().max(1));
 
 impl<T> From<T> for PerCore<T> {
     fn from(size: T) -> Self {
@@ -524,7 +524,10 @@ impl ThreadPool {
     #[inline]
     #[allow(clippy::useless_conversion)]
     pub fn completed_tasks(&self) -> u64 {
-        self.shared.completed_tasks_count.load(Ordering::Relaxed).into()
+        self.shared
+            .completed_tasks_count
+            .load(Ordering::Relaxed)
+            .into()
     }
 
     /// Get the number of tasks that have panicked since the pool was created.
@@ -553,7 +556,10 @@ impl ThreadPool {
     #[inline]
     #[allow(clippy::useless_conversion)]
     pub fn panicked_tasks(&self) -> u64 {
-        self.shared.panicked_tasks_count.load(Ordering::SeqCst).into()
+        self.shared
+            .panicked_tasks_count
+            .load(Ordering::SeqCst)
+            .into()
     }
 
     /// Submit a closure to be executed by the thread pool.
